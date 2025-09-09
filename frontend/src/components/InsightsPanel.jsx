@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { weatherUtils } from '../services/weatherApi';
+import DataVisualization from './DataVisualization';
 import { 
   TrendingUp, 
   AlertTriangle, 
@@ -10,10 +11,11 @@ import {
   List,
   FileText,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  BarChart3
 } from 'lucide-react';
 
-export default function InsightsPanel({ forecastData, recommendationsData }) {
+export default function InsightsPanel({ forecastData, recommendationsData, currentWeather }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedItems, setExpandedItems] = useState({});
   
@@ -74,6 +76,7 @@ export default function InsightsPanel({ forecastData, recommendationsData }) {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Target },
+    { id: 'analytics', label: 'Data Analytics', icon: BarChart3 },
     { id: 'checklist', label: 'Action Checklist', icon: List },
     { id: 'insights', label: 'Forecast Insights', icon: Clock }
   ];
@@ -153,6 +156,15 @@ export default function InsightsPanel({ forecastData, recommendationsData }) {
                 </div>
               )}
             </div>
+          )}
+
+          {/* Data Analytics Tab */}
+          {activeTab === 'analytics' && (
+            <DataVisualization 
+              forecastData={forecastData}
+              recommendationsData={recommendationsData}
+              currentWeather={currentWeather}
+            />
           )}
 
           {/* Action Checklist Tab */}

@@ -311,6 +311,7 @@ export default function Dashboard() {
               <InsightsPanel 
                 forecastData={data.forecast_insights}
                 recommendationsData={data.recommendations}
+                currentWeather={data.current_weather}
               />
             </div>
           </div>
