@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .card-hover {
+    @apply transition-shadow duration-200 hover:shadow-md;
+  }
+  
+  .btn-primary {
+    @apply bg-weather-blue text-white px-4 py-2 rounded-md font-medium 
+           hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 
+           focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 px-4 py-2 rounded-md font-medium 
+           hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 
+           focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-200;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
+           focus:outline-none focus:ring-2 focus:ring-weather-blue focus:border-weather-blue
+           disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed
+           transition-colors duration-200;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .priority-critical {
+    @apply bg-red-100 text-red-800 border border-red-200;
+  }
+  
+  .priority-high {
+    @apply bg-orange-100 text-orange-800 border border-orange-200;
+  }
+  
+  .priority-medium {
+    @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+  }
+  
+  .priority-low {
+    @apply bg-blue-100 text-blue-800 border border-blue-200;
+  }
+  
+  .loading-spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-weather-blue;
+  }
+  
+  .fade-in {
+    @apply animate-fade-in;
+  }
+  
+  .slide-up {
+    @apply animate-slide-up;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
