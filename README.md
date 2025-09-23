@@ -175,6 +175,28 @@ curl "http://localhost:8000/api/system/status"
 - **For Citizens**: Accessible weather briefings without technical jargon
 - **Demonstrates**: How LLMs can translate complex data into life-saving knowledge
 
+## 🚀 Production Deployment
+
+### Quick Deploy Options
+
+**Vercel + Render**
+- Frontend: Deploy to [Vercel](https://vercel.com) (free tier)
+- Backend: Deploy to [Render](https://render.com) (free tier available)
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
+
+### Environment Variables for Production
+```bash
+# Frontend (Vercel)
+VITE_API_BASE_URL=https://your-backend-url.onrender.com/api
+
+# Backend (Render)
+OPENAI_API_KEY=your_openai_api_key
+OPENWEATHER_API_KEY=your_openweather_api_key
+TZ=Asia/Manila
+PORT=8000
+```
+
 ## 🚀 Development Roadmap
 
 - [x] Backend API with multi-agent workflow
@@ -182,7 +204,9 @@ curl "http://localhost:8000/api/system/status"
 - [x] AI-generated audience-specific prompts
 - [x] Interactive action checklist with expandable details
 - [x] Multi-agent coordination with LangGraph
-- [ ] Data visualization (charts, gauges)
+- [x] Comprehensive data visualization suite
+- [x] Timezone handling for Philippines (GMT+8)
+- [x] Production deployment configuration
 - [ ] Real-time weather monitoring
 - [ ] Historical pattern learning
 - [ ] Mobile app version
