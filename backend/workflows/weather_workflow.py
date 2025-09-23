@@ -1,6 +1,6 @@
 import asyncio
 from typing import Dict, Any, Optional, TypedDict, List
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from langgraph.graph import StateGraph, END
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel
@@ -10,6 +10,9 @@ from agents.forecast_agent import ForecastAgent, ForecastAnalysis
 from agents.advice_agent import AdviceAgent, AdviceReport
 from services.weather_api import OpenWeatherService, WeatherData, ForecastData
 from services.rag_service import RAGService, RAGResult
+
+# Setup timezone (GMT+8 for Philippines)
+PHILIPPINE_TZ = timezone(timedelta(hours=8))
 
 
 class WorkflowState(TypedDict):
@@ -251,7 +254,7 @@ class WeatherInsightsWorkflow:
         if final_state.get("error"):
             return WeatherInsightsResult(
                 location=location,
-                analysis_time=datetime.now(),
+                analysis_time=datetime.now(PHILIPPINE_TZ),
                 data_quality=None,
                 forecast_insights=None,
                 recommendations=None,
@@ -263,7 +266,7 @@ class WeatherInsightsWorkflow:
         # Compile successful result
         return WeatherInsightsResult(
             location=location,
-            analysis_time=datetime.now(),
+            analysis_time=datetime.now(PHILIPPINE_TZ),
             data_quality=final_state["data_analysis"],
             forecast_insights=final_state["forecast_analysis"],
             recommendations=final_state["advice_report"],
@@ -292,7 +295,7 @@ class WeatherInsightsWorkflow:
                 final_results.append(
                     WeatherInsightsResult(
                         location=locations[i],
-                        analysis_time=datetime.now(),
+                        analysis_time=datetime.now(PHILIPPINE_TZ),
                         data_quality=None,
                         forecast_insights=None,
                         recommendations=None,
@@ -334,14 +337,14 @@ class WeatherInsightsWorkflow:
                     "forecast_agent": "operational", 
                     "advice_agent": "operational"
                 },
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now(PHILIPPINE_TZ).isoformat()
             }
             
         except Exception as e:
             return {
                 "workflow": "error",
                 "error": str(e),
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now(PHILIPPINE_TZ).isoformat()
             }
     
     def close(self):

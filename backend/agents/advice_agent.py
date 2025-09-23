@@ -1,11 +1,14 @@
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 
 from agents.data_agent import WeatherAnalysis
 from agents.forecast_agent import ForecastAnalysis, WeatherInsight
+
+# Setup timezone (GMT+8 for Philippines)
+PHILIPPINE_TZ = timezone(timedelta(hours=8))
 
 
 class Recommendation(BaseModel):
@@ -79,7 +82,7 @@ class AdviceAgent:
         
         return AdviceReport(
             location=forecast_analysis.location,
-            report_time=datetime.now(),
+            report_time=datetime.now(PHILIPPINE_TZ),
             recommendations=recommendations,
             priority_summary=priority_summary,
             action_checklist=action_checklist,

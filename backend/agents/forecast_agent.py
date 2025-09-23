@@ -1,12 +1,15 @@
 import pandas as pd
 import numpy as np
 from typing import Dict, Any, List, Optional, Union
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 
 from services.weather_api import WeatherData, ForecastData
+
+# Setup timezone (GMT+8 for Philippines)
+PHILIPPINE_TZ = timezone(timedelta(hours=8))
 
 
 class WeatherInsight(BaseModel):
@@ -112,7 +115,7 @@ class ForecastAgent:
         
         return ForecastAnalysis(
             location=forecast_data.location,
-            analysis_time=datetime.now(),
+            analysis_time=datetime.now(PHILIPPINE_TZ),
             insights=insights,
             weather_trends=trends,
             risk_alerts=risks,

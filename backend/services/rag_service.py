@@ -164,8 +164,8 @@ class RAGService:
             return False
     
     async def search_knowledge(
-        self, 
-        query: str, 
+        self,
+        query: str,
         limit: int = 5,
         category_filter: Optional[str] = None,
         location_filter: Optional[str] = None
@@ -175,13 +175,12 @@ class RAGService:
             # Create query embedding
             query_embedding = self.encoder.encode(query)
             
-            # Prepare search filters - Updated for newer Qdrant versions
-            from qdrant_client.http import models
-            
+            # Prepare search filters - Use proper Qdrant models
             search_filter = None
             if category_filter or location_filter:
+                from qdrant_client.http import models
                 conditions = []
-                
+
                 if category_filter:
                     conditions.append(
                         models.FieldCondition(
@@ -189,18 +188,17 @@ class RAGService:
                             match=models.MatchValue(value=category_filter)
                         )
                     )
-                
+
                 if location_filter:
                     conditions.append(
                         models.FieldCondition(
-                            key="location", 
+                            key="location",
                             match=models.MatchValue(value=location_filter)
                         )
                     )
-                
-                search_filter = models.Filter(
-                    must=conditions if len(conditions) > 1 else conditions
-                )
+
+                if conditions:
+                    search_filter = models.Filter(must=conditions)
             
             # Perform search
             search_results = self.client.search(

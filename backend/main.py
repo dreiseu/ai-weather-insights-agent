@@ -1,6 +1,6 @@
 import asyncio
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import List
 from contextlib import asynccontextmanager
 
@@ -35,7 +35,10 @@ class Settings(BaseSettings):
 # Global variables
 settings = Settings()
 workflow: WeatherInsightsWorkflow = None
-start_time = datetime.now()
+
+# Setup timezone (GMT+8 for Philippines)
+PHILIPPINE_TZ = timezone(timedelta(hours=8))
+start_time = datetime.now(PHILIPPINE_TZ)
 
 
 @asynccontextmanager
@@ -72,7 +75,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # React dev server
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -188,7 +191,7 @@ def convert_workflow_result_to_response(result: WeatherInsightsResult) -> Weathe
 @app.get("/", response_model=HealthResponse)
 async def root():
     """Root endpoint with basic service info"""
-    uptime = datetime.now() - start_time
+    uptime = datetime.now(PHILIPPINE_TZ) - start_time
     return HealthResponse(
         status="operational",
         uptime=str(uptime).split('.')[0]  # Remove microseconds
@@ -198,11 +201,21 @@ async def root():
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint"""
-    uptime = datetime.now() - start_time
+    uptime = datetime.now(PHILIPPINE_TZ) - start_time
     return HealthResponse(
         status="operational",
         uptime=str(uptime).split('.')[0]
     )
+
+@app.post("/api/test-connection")
+async def test_connection(data: dict):
+    """Simple test endpoint to verify frontend-backend connection"""
+    return {
+        "status": "success",
+        "message": "Backend received your request successfully!",
+        "received_data": data,
+        "timestamp": datetime.now(PHILIPPINE_TZ).isoformat()
+    }
 
 
 @app.post("/api/weather/insights", response_model=WeatherInsightsResponse)

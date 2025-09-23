@@ -38,6 +38,24 @@ api.interceptors.response.use(
  */
 export const weatherApi = {
   /**
+   * Test connection to backend
+   */
+  async testConnection() {
+    try {
+      console.log('🧪 Testing backend connection...');
+      const response = await api.post('/test-connection', {
+        test: 'frontend-backend connection',
+        timestamp: new Date().toISOString()
+      });
+      console.log('✅ Backend connection test successful:', response.data);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('❌ Backend connection test failed:', error);
+      return { success: false, error: error.message };
+    }
+  },
+
+  /**
    * Get weather insights for a single location
    * @param {Object} params - Request parameters
    * @param {string} params.location - Location name (e.g., "Manila, PH")
