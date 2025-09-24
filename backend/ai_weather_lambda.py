@@ -232,16 +232,17 @@ def lambda_handler(event, context):
     method = event.get('httpMethod', 'GET')
     path = event.get('path', '/')
 
-    # CORS headers
+    # CORS headers - Enhanced for frontend compatibility
     cors_headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin',
+        'Access-Control-Max-Age': '3600'
     }
 
     try:
-        # Handle OPTIONS (CORS preflight)
+        # Handle OPTIONS (CORS preflight) - for ANY path
         if method == 'OPTIONS':
             return {
                 'statusCode': 200,
