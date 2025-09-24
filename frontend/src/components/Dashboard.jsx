@@ -311,11 +311,14 @@ export default function Dashboard() {
               <InsightsPanel
                 forecastData={{
                   ...data,
-                  forecasts: data.recommendations, // For DataVisualization
-                  insights: data.recommendations   // For DataVisualization fallback
+                  forecasts: data.forecast || [], // Real forecast data from backend
+                  insights: data.recommendations || []
                 }}
                 recommendationsData={data}
-                currentWeather={data.current_weather}
+                currentWeather={{
+                  ...data.current_weather,
+                  location: data.location
+                }}
               />
             </div>
           </div>

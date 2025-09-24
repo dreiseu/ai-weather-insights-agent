@@ -140,13 +140,24 @@ def analyze_weather_with_ai(weather_data, audience="general"):
         cloudiness = clouds_data.get('all', None)  # Cloudiness percentage
         location = current.get('name', 'Unknown')
 
-        # Get forecast summary
+        # Get forecast summary with more details
         forecast_items = forecast.get('list', [])[:8]  # Next 24 hours
         forecast_summary = []
         for item in forecast_items:
+            main_data = item.get('main', {})
+            weather_data = item.get('weather', [{}])[0]
+            wind_data = item.get('wind', {})
+            rain_data = item.get('rain', {})
+
             forecast_summary.append({
-                'temp': item.get('main', {}).get('temp', 0),
-                'condition': item.get('weather', [{}])[0].get('description', ''),
+                'temperature': main_data.get('temp', 0),
+                'condition': weather_data.get('description', ''),
+                'weather_condition': weather_data.get('main', ''),
+                'humidity': main_data.get('humidity', 0),
+                'pressure': main_data.get('pressure', 0),
+                'wind_speed': wind_data.get('speed', 0),
+                'rainfall_3h': rain_data.get('3h', 0),
+                'timestamp': item.get('dt_txt', ''),
                 'time': item.get('dt_txt', '')
             })
 
@@ -240,6 +251,7 @@ def analyze_weather_with_ai(weather_data, audience="general"):
             "recommendations": ai_analysis.get("recommendations", []),
             "risk_alerts": ai_analysis.get("risk_alerts", []),
             "summary": ai_analysis.get("summary", ""),
+            "forecast": forecast_summary,
             "audience": audience,
             "success": True,
             "ai_powered": True
@@ -302,6 +314,7 @@ def create_fallback_response(weather_data, audience):
         "recommendations": recommendations,
         "risk_alerts": [rec["title"] for rec in recommendations if rec["priority"] in ["critical", "high"]],
         "summary": f"Basic weather analysis for {weather_data.get('name', 'your location')}",
+        "forecast": [], # No forecast in fallback
         "audience": audience,
         "success": True,
         "ai_powered": False
