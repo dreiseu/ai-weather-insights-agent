@@ -23,16 +23,15 @@ export default function WeatherCard({ weatherData }) {
     );
   }
 
-  const {
-    location,
-    temperature,
-    humidity,
-    pressure,
-    wind_speed,
-    weather_condition,
-    description,
-    timestamp
-  } = weatherData;
+  // Handle different data structures
+  const location = weatherData.location || 'Unknown Location';
+  const temperature = weatherData.current_weather?.temperature || weatherData.temperature || 0;
+  const humidity = weatherData.current_weather?.humidity || weatherData.humidity || 0;
+  const weather_condition = weatherData.current_weather?.condition || weatherData.condition || 'unknown';
+  const description = weather_condition;
+  const timestamp = weatherData.analysis_time || weatherData.timestamp;
+  const pressure = weatherData.current_weather?.pressure || weatherData.pressure || null;
+  const wind_speed = weatherData.current_weather?.wind_speed || weatherData.wind_speed || null;
 
   const weatherIcon = weatherUtils.getWeatherIcon(weather_condition);
   const formattedDate = timestamp ? weatherUtils.formatDate(timestamp) : 'Now';

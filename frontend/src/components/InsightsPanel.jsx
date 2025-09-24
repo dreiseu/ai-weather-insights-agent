@@ -37,8 +37,15 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
     );
   }
 
-  const { insights, weather_trends, risk_alerts } = forecastData;
-  const { recommendations, priority_summary, action_checklist } = recommendationsData;
+  // Handle our actual data structure
+  const insights = forecastData.recommendations || [];
+  const weather_trends = [];
+  const risk_alerts = forecastData.risk_alerts || [];
+  const recommendations = recommendationsData.recommendations || [];
+  const priority_summary = recommendationsData.summary || "";
+  const action_checklist = (recommendationsData.recommendations || []).map(rec =>
+    `${rec.timing}: ${rec.title}`
+  );
 
   // Sort recommendations by priority and timing
   const sortedRecommendations = [...recommendations].sort((a, b) => {

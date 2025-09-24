@@ -266,15 +266,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 fade-in">
             {/* Weather Card */}
             <div className="lg:col-span-1">
-              <WeatherCard weatherData={{
-                ...data.current_weather,
-                location: data.location,
-                weather_condition: data.current_weather.condition,
-                description: data.current_weather.condition,
-                timestamp: data.analysis_time,
-                pressure: null,
-                wind_speed: null
-              }} />
+              <WeatherCard weatherData={data} />
               
               {/* Data Quality Card */}
               {data.data_quality && (
@@ -317,28 +309,8 @@ export default function Dashboard() {
             {/* Insights Panel */}
             <div className="lg:col-span-2">
               <InsightsPanel
-                forecastData={{
-                  insights: Array.isArray(data.recommendations) ? data.recommendations : [],
-                  forecasts: Array.isArray(data.recommendations) ? data.recommendations : [],
-                  weather_trends: Array.isArray(data.risk_alerts) ?
-                    data.risk_alerts.map(alert => ({
-                      trend: alert,
-                      severity: 'medium',
-                      timeframe: '24h'
-                    })) : [],
-                  risk_alerts: Array.isArray(data.risk_alerts) ? data.risk_alerts : []
-                }}
-                recommendationsData={{
-                  recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
-                  priority_summary: data.summary || "",
-                  action_checklist: Array.isArray(data.recommendations) ?
-                    data.recommendations.map(rec => {
-                      const timing = rec.timing === 'today' ? '24H' :
-                                   rec.timing === 'immediate' ? 'NOW' :
-                                   rec.timing === 'this week' ? 'WEEK' : '24H';
-                      return `${timing}: ${rec.title}`;
-                    }) : []
-                }}
+                forecastData={data}
+                recommendationsData={data}
                 currentWeather={data.current_weather}
               />
             </div>
