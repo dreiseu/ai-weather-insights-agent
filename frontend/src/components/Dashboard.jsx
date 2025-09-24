@@ -325,7 +325,8 @@ export default function Dashboard() {
                 recommendationsData={{
                   recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
                   priority_summary: data.summary || "",
-                  action_checklist: []
+                  action_checklist: Array.isArray(data.recommendations) ?
+                    data.recommendations.map(rec => `${rec.timing}: ${rec.action}`) : []
                 }}
                 currentWeather={data.current_weather}
               />
