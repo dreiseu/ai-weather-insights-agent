@@ -262,16 +262,18 @@ export default function Dashboard() {
         )}
 
         {/* Results */}
-        {console.log('Dashboard data:', data) || null}
-        {data && console.log('Rendering condition passed:', data.success) || null}
         {data && data.success && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 fade-in">
-            <h2 className="text-2xl font-bold text-green-600">✅ DATA RECEIVED - RENDERING WEATHER INSIGHTS</h2>
             {/* Weather Card */}
             <div className="lg:col-span-1">
               <WeatherCard weatherData={{
                 ...data.current_weather,
-                location: data.location
+                location: data.location,
+                weather_condition: data.current_weather.condition,
+                description: data.current_weather.condition,
+                timestamp: data.analysis_time,
+                pressure: null,
+                wind_speed: null
               }} />
               
               {/* Data Quality Card */}

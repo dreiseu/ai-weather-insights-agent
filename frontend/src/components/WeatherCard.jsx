@@ -35,7 +35,7 @@ export default function WeatherCard({ weatherData }) {
   } = weatherData;
 
   const weatherIcon = weatherUtils.getWeatherIcon(weather_condition);
-  const formattedDate = weatherUtils.formatDate(timestamp);
+  const formattedDate = timestamp ? weatherUtils.formatDate(timestamp) : 'Now';
   const formattedTemp = weatherUtils.formatTemperature(temperature);
 
   return (
@@ -80,23 +80,27 @@ export default function WeatherCard({ weatherData }) {
           <div className="text-xs text-gray-500">Humidity</div>
         </div>
 
-        {/* Wind */}
-        <div className="text-center p-3 bg-green-50 rounded-lg">
-          <Wind className="w-5 h-5 text-green-500 mx-auto mb-1" />
-          <div className="text-lg font-semibold text-gray-700">
-            {Math.round(wind_speed)} m/s
+        {/* Wind - only show if available */}
+        {wind_speed && (
+          <div className="text-center p-3 bg-green-50 rounded-lg">
+            <Wind className="w-5 h-5 text-green-500 mx-auto mb-1" />
+            <div className="text-lg font-semibold text-gray-700">
+              {Math.round(wind_speed)} m/s
+            </div>
+            <div className="text-xs text-gray-500">Wind</div>
           </div>
-          <div className="text-xs text-gray-500">Wind</div>
-        </div>
+        )}
 
-        {/* Pressure */}
-        <div className="text-center p-3 bg-purple-50 rounded-lg">
-          <Gauge className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-          <div className="text-lg font-semibold text-gray-700">
-            {Math.round(pressure)} hPa
+        {/* Pressure - only show if available */}
+        {pressure && (
+          <div className="text-center p-3 bg-purple-50 rounded-lg">
+            <Gauge className="w-5 h-5 text-purple-500 mx-auto mb-1" />
+            <div className="text-lg font-semibold text-gray-700">
+              {Math.round(pressure)} hPa
+            </div>
+            <div className="text-xs text-gray-500">Pressure</div>
           </div>
-          <div className="text-xs text-gray-500">Pressure</div>
-        </div>
+        )}
       </div>
     </div>
   );
