@@ -316,10 +316,7 @@ export default function Dashboard() {
             <div className="lg:col-span-2">
               <InsightsPanel
                 forecastData={data}
-                recommendationsData={data.recommendations}
-                riskAlerts={data.risk_alerts}
-                summary={data.summary}
-                audience={data.audience}
+                recommendationsData={Array.isArray(data.recommendations) ? data.recommendations : []}
                 currentWeather={data.current_weather}
               />
             </div>
