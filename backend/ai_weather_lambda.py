@@ -172,16 +172,21 @@ def analyze_weather_with_ai(weather_data, audience="general"):
             {
                 "role": "user",
                 "content": f"""
-                Current weather in {location}:
+                Current weather analysis for {location} at {datetime.now(PHILIPPINE_TZ).strftime('%Y-%m-%d %H:%M')}:
                 - Temperature: {temp}°C
                 - Humidity: {humidity}%
                 - Condition: {condition}
+                - Pressure: {pressure if pressure else 'N/A'} hPa
+                - Wind Speed: {wind_speed if wind_speed else 'N/A'} m/s
+                - Rainfall (1h): {rainfall_1h if rainfall_1h else 0} mm
+                - Cloudiness: {cloudiness if cloudiness else 'N/A'}%
 
-                24-hour forecast: {json.dumps(forecast_summary)}
+                24-hour detailed forecast: {json.dumps(forecast_summary)}
 
                 Target audience: {audience}
+                Location context: {location}
 
-                Please provide:
+                Generate UNIQUE, LOCATION-SPECIFIC recommendations. Avoid generic advice. Please provide:
                 1. 3-5 specific, actionable recommendations
                 2. Priority level for each (critical/high/medium/low)
                 3. Timing (immediate/within 2 hours/today/this week)
@@ -196,6 +201,9 @@ def analyze_weather_with_ai(weather_data, audience="general"):
                             "priority": "critical|high|medium|low",
                             "timing": "immediate|within 2 hours|today|this week",
                             "reason": "brief explanation",
+                            "confidence": 0.85,
+                            "time_horizon": "short-term|medium-term|long-term",
+                            "category": "safety|preparation|maintenance|planning",
                             "target_audience": "{audience}"
                         }}
                     ],

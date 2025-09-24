@@ -172,12 +172,12 @@ export default function DataVisualization({ forecastData, recommendationsData, c
     { name: 'Low', value: recommendationsData.recommendations.filter(r => r.priority === 'low').length, color: '#3b82f6' }
   ].filter(item => item.value > 0);
 
-  // Timeline data
+  // Timeline data - map our API timing values to chart categories
   const timelineData = [
-    { timing: 'Now', count: recommendationsData.recommendations.filter(r => r.timing === 'now').length, color: '#ef4444' },
-    { timing: '24H', count: recommendationsData.recommendations.filter(r => r.timing === 'within_24h').length, color: '#f97316' },
-    { timing: 'Week', count: recommendationsData.recommendations.filter(r => r.timing === 'this_week').length, color: '#eab308' },
-    { timing: 'Later', count: recommendationsData.recommendations.filter(r => r.timing === 'next_week').length, color: '#3b82f6' }
+    { timing: 'Now', count: recommendationsData.recommendations.filter(r => r.timing === 'immediate').length, color: '#ef4444' },
+    { timing: '24H', count: recommendationsData.recommendations.filter(r => r.timing === 'today' || r.timing === 'within 2 hours').length, color: '#f97316' },
+    { timing: 'Week', count: recommendationsData.recommendations.filter(r => r.timing === 'this week').length, color: '#eab308' },
+    { timing: 'Later', count: recommendationsData.recommendations.filter(r => r.timing === 'next_week' || r.timing === 'later').length, color: '#3b82f6' }
   ];
 
   // Risk level calculation
