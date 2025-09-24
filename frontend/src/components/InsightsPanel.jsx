@@ -53,21 +53,32 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
   const recommendations = forecastData.recommendations || [];
   const priority_summary = forecastData.summary || "";
   const action_checklist = (forecastData.action_checklist || []).map(item => {
+    // Safety check for item structure
+    if (!item || typeof item !== 'object') {
+      console.warn('Invalid action checklist item:', item);
+      return 'UNKNOWN: Invalid item';
+    }
+
     // Format timing to match what the action checklist expects
     const timing = item.timing === 'today' ? '24H' :
                   item.timing === 'immediate' ? 'NOW' :
                   item.timing === 'within 2 hours' ? '2H' :
                   item.timing === 'this week' ? 'WEEK' : '24H';
-    return `${timing}: ${item.item}`;
+
+    // Use item.item or fallback to item.action or item.title
+    const actionText = item.item || item.action || item.title || 'Unknown action';
+    return `${timing}: ${actionText}`;
   });
 
   // Debug extracted data
+  console.log('Raw forecastData.action_checklist:', forecastData.action_checklist);
+  console.log('Processed action_checklist:', action_checklist);
   console.log('Extracted data:', {
     insights: insights.length,
     risk_alerts: risk_alerts.length,
     recommendations: recommendations.length,
-    priority_summary: priority_summary.substring(0, 50) + '...',
-    action_checklist: action_checklist.length
+    action_checklist_count: action_checklist.length,
+    priority_summary: priority_summary.substring(0, 50) + '...'
   });
 
   // Sort recommendations by priority and timing
