@@ -309,7 +309,11 @@ export default function Dashboard() {
             {/* Insights Panel */}
             <div className="lg:col-span-2">
               <InsightsPanel
-                forecastData={data}
+                forecastData={{
+                  ...data,
+                  forecasts: data.recommendations, // For DataVisualization
+                  insights: data.recommendations   // For DataVisualization fallback
+                }}
                 recommendationsData={data}
                 currentWeather={data.current_weather}
               />

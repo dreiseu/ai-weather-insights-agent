@@ -37,15 +37,20 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
     );
   }
 
-  // Handle our actual data structure
+  // Handle our actual data structure - both objects have the same data
   const insights = forecastData.recommendations || [];
-  const weather_trends = [];
+  const weather_trends = []; // Empty for now - could be populated with trend analysis
   const risk_alerts = forecastData.risk_alerts || [];
-  const recommendations = recommendationsData.recommendations || [];
-  const priority_summary = recommendationsData.summary || "";
-  const action_checklist = (recommendationsData.recommendations || []).map(rec =>
-    `${rec.timing}: ${rec.title}`
-  );
+  const recommendations = forecastData.recommendations || [];
+  const priority_summary = forecastData.summary || "";
+  const action_checklist = (forecastData.recommendations || []).map(rec => {
+    // Format timing to match what the action checklist expects
+    const timing = rec.timing === 'today' ? '24H' :
+                  rec.timing === 'immediate' ? 'NOW' :
+                  rec.timing === 'within 2 hours' ? '2H' :
+                  rec.timing === 'this week' ? 'WEEK' : '24H';
+    return `${timing}: ${rec.title}`;
+  });
 
   // Sort recommendations by priority and timing
   const sortedRecommendations = [...recommendations].sort((a, b) => {

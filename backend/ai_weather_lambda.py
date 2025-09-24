@@ -119,10 +119,25 @@ def analyze_weather_with_ai(weather_data, audience="general"):
         current = weather_data.get("current", {})
         forecast = weather_data.get("forecast", {})
 
-        # Prepare weather summary
-        temp = current.get('main', {}).get('temp', 0)
-        humidity = current.get('main', {}).get('humidity', 0)
-        condition = current.get('weather', [{}])[0].get('description', 'unknown')
+        # Prepare weather summary - Extract more fields from OpenWeather API
+        main_data = current.get('main', {})
+        weather_data_list = current.get('weather', [{}])
+        wind_data = current.get('wind', {})
+        rain_data = current.get('rain', {})
+        clouds_data = current.get('clouds', {})
+
+        temp = main_data.get('temp', 0)
+        humidity = main_data.get('humidity', 0)
+        pressure = main_data.get('pressure', None)
+        feels_like = main_data.get('feels_like', None)
+        condition = weather_data_list[0].get('description', 'unknown')
+        weather_main = weather_data_list[0].get('main', 'unknown')
+        wind_speed = wind_data.get('speed', None)
+        wind_direction = wind_data.get('deg', None)
+        visibility = current.get('visibility', None)
+        rainfall_1h = rain_data.get('1h', None)  # Rain volume last 1 hour
+        rainfall_3h = rain_data.get('3h', None)  # Rain volume last 3 hours
+        cloudiness = clouds_data.get('all', None)  # Cloudiness percentage
         location = current.get('name', 'Unknown')
 
         # Get forecast summary
@@ -211,7 +226,16 @@ def analyze_weather_with_ai(weather_data, audience="general"):
             "current_weather": {
                 "temperature": temp,
                 "humidity": humidity,
-                "condition": condition
+                "condition": condition,
+                "weather_main": weather_main,
+                "pressure": pressure,
+                "feels_like": feels_like,
+                "wind_speed": wind_speed,
+                "wind_direction": wind_direction,
+                "visibility": visibility,
+                "rainfall_1h": rainfall_1h,
+                "rainfall_3h": rainfall_3h,
+                "cloudiness": cloudiness
             },
             "recommendations": ai_analysis.get("recommendations", []),
             "risk_alerts": ai_analysis.get("risk_alerts", []),
@@ -228,9 +252,23 @@ def analyze_weather_with_ai(weather_data, audience="general"):
 
 def create_fallback_response(weather_data, audience):
     """Create basic response when AI is unavailable"""
-    temp = weather_data.get('main', {}).get('temp', 0)
-    humidity = weather_data.get('main', {}).get('humidity', 0)
-    condition = weather_data.get('weather', [{}])[0].get('description', 'unknown')
+    main_data = weather_data.get('main', {})
+    weather_list = weather_data.get('weather', [{}])
+    wind_data = weather_data.get('wind', {})
+    rain_data = weather_data.get('rain', {})
+    clouds_data = weather_data.get('clouds', {})
+
+    temp = main_data.get('temp', 0)
+    humidity = main_data.get('humidity', 0)
+    condition = weather_list[0].get('description', 'unknown')
+    pressure = main_data.get('pressure', None)
+    feels_like = main_data.get('feels_like', None)
+    wind_speed = wind_data.get('speed', None)
+    wind_direction = wind_data.get('deg', None)
+    visibility = weather_data.get('visibility', None)
+    rainfall_1h = rain_data.get('1h', None)
+    rainfall_3h = rain_data.get('3h', None)
+    cloudiness = clouds_data.get('all', None)
 
     # Basic rules-based recommendations
     recommendations = []
@@ -251,7 +289,15 @@ def create_fallback_response(weather_data, audience):
         "current_weather": {
             "temperature": temp,
             "humidity": humidity,
-            "condition": condition
+            "condition": condition,
+            "pressure": pressure,
+            "feels_like": feels_like,
+            "wind_speed": wind_speed,
+            "wind_direction": wind_direction,
+            "visibility": visibility,
+            "rainfall_1h": rainfall_1h,
+            "rainfall_3h": rainfall_3h,
+            "cloudiness": cloudiness
         },
         "recommendations": recommendations,
         "risk_alerts": [rec["title"] for rec in recommendations if rec["priority"] in ["critical", "high"]],
