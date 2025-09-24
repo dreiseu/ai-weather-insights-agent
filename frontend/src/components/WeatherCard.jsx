@@ -71,8 +71,8 @@ export default function WeatherCard({ weatherData }) {
         </div>
       </div>
 
-      {/* Weather Details Grid */}
-      <div className="grid grid-cols-3 gap-4">
+      {/* Weather Details Grid - Dynamic columns based on available data */}
+      <div className={`grid gap-4 ${wind_speed || pressure ? 'grid-cols-3' : 'grid-cols-1'}`}>
         {/* Humidity */}
         <div className="text-center p-3 bg-blue-50 rounded-lg">
           <Droplets className="w-5 h-5 text-blue-500 mx-auto mb-1" />
