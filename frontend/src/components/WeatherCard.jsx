@@ -96,69 +96,53 @@ export default function WeatherCard({ weatherData }) {
       <div className="card">
         <h4 className="text-lg font-semibold text-gray-900 mb-6">Current Conditions</h4>
 
-        {/* Weather Details - Responsive: Grid on small screens, Horizontal row on large screens */}
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:flex xl:flex-row xl:justify-between gap-6">
+        {/* Weather Details - Inline format with icon + value + label on same line */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {/* Humidity */}
-          <div className="text-center p-6 bg-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-shadow xl:flex-1">
-            <Droplets className="w-8 h-8 text-blue-500 mx-auto mb-3" />
-            <div className="text-2xl font-bold text-gray-700 mb-1">{humidity}%</div>
-            <div className="text-sm text-gray-600 font-medium">Humidity</div>
+          <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <Droplets className="w-5 h-5 text-blue-500 flex-shrink-0" />
+            <span className="text-lg font-semibold text-gray-700">{humidity}% Humidity</span>
           </div>
 
           {/* Wind Speed */}
           {wind_speed && (
-            <div className="text-center p-6 bg-green-50 rounded-xl border border-green-100 hover:shadow-md transition-shadow xl:flex-1">
-              <Wind className="w-8 h-8 text-green-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-700 mb-1">
-                {Math.round(wind_speed)} m/s
-              </div>
-              <div className="text-sm text-gray-600 font-medium">Wind Speed</div>
+            <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg border border-green-100">
+              <Wind className="w-5 h-5 text-green-500 flex-shrink-0" />
+              <span className="text-lg font-semibold text-gray-700">{Math.round(wind_speed)}m/s Wind Speed</span>
             </div>
           )}
 
           {/* Wind Direction */}
           {wind_direction && (
-            <div className="text-center p-6 bg-cyan-50 rounded-xl border border-cyan-100 hover:shadow-md transition-shadow xl:flex-1">
-              <Compass className="w-8 h-8 text-cyan-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-700 mb-1">
-                {wind_direction}°
-              </div>
-              <div className="text-sm text-gray-600 font-medium">Wind Direction</div>
+            <div className="flex items-center space-x-3 p-4 bg-cyan-50 rounded-lg border border-cyan-100">
+              <Compass className="w-5 h-5 text-cyan-500 flex-shrink-0" />
+              <span className="text-lg font-semibold text-gray-700">{wind_direction}° Wind Direction</span>
             </div>
           )}
 
           {/* Pressure */}
           {pressure && (
-            <div className="text-center p-6 bg-purple-50 rounded-xl border border-purple-100 hover:shadow-md transition-shadow xl:flex-1">
-              <Gauge className="w-8 h-8 text-purple-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-700 mb-1">
-                {Math.round(pressure)} hPa
-              </div>
-              <div className="text-sm text-gray-600 font-medium">Pressure</div>
+            <div className="flex items-center space-x-3 p-4 bg-purple-50 rounded-lg border border-purple-100">
+              <Gauge className="w-5 h-5 text-purple-500 flex-shrink-0" />
+              <span className="text-lg font-semibold text-gray-700">{Math.round(pressure)}hPa Pressure</span>
             </div>
           )}
 
           {/* Visibility */}
           {visibility && (
-            <div className="text-center p-6 bg-amber-50 rounded-xl border border-amber-100 hover:shadow-md transition-shadow xl:flex-1">
-              <Eye className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-700 mb-1">
-                {Math.round(visibility / 1000)} km
-              </div>
-              <div className="text-sm text-gray-600 font-medium">Visibility</div>
+            <div className="flex items-center space-x-3 p-4 bg-amber-50 rounded-lg border border-amber-100">
+              <Eye className="w-5 h-5 text-amber-500 flex-shrink-0" />
+              <span className="text-lg font-semibold text-gray-700">{Math.round(visibility / 1000)}km Visibility</span>
             </div>
           )}
 
           {/* Rainfall */}
           {(rainfall_1h || rainfall_3h) && (
-            <div className="text-center p-6 bg-indigo-50 rounded-xl border border-indigo-100 hover:shadow-md transition-shadow xl:flex-1">
-              <CloudRain className="w-8 h-8 text-indigo-500 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-gray-700 mb-1">
-                {rainfall_1h ? `${rainfall_1h} mm` : rainfall_3h ? `${rainfall_3h} mm` : '0 mm'}
-              </div>
-              <div className="text-sm text-gray-600 font-medium">
-                {rainfall_1h ? 'Rainfall (1h)' : 'Rainfall (3h)'}
-              </div>
+            <div className="flex items-center space-x-3 p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+              <CloudRain className="w-5 h-5 text-indigo-500 flex-shrink-0" />
+              <span className="text-lg font-semibold text-gray-700">
+                {rainfall_1h ? `${rainfall_1h}mm` : rainfall_3h ? `${rainfall_3h}mm` : '0mm'} Rainfall
+              </span>
             </div>
           )}
         </div>
