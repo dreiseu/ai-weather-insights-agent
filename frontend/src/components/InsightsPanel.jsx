@@ -82,17 +82,6 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
   });
 
   console.log('Current activeTab:', activeTab);
-  console.log('Available tabs:', tabs.map(t => t.id));
-
-  // Debug action checklist rendering conditions
-  const checklistRenderCheck = {
-    activeTab,
-    isChecklistTab: activeTab === 'checklist',
-    hasActionChecklist: !!action_checklist,
-    actionChecklistLength: action_checklist ? action_checklist.length : 0,
-    shouldRender: activeTab === 'checklist' && action_checklist && action_checklist.length > 0
-  };
-  console.log('Action Checklist Render Check:', checklistRenderCheck);
 
   // Sort recommendations by priority and timing
   const sortedRecommendations = [...recommendations].sort((a, b) => {
@@ -140,6 +129,17 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
     { id: 'checklist', label: 'Action Checklist', icon: List },
     { id: 'insights', label: 'Forecast Insights', icon: Clock }
   ];
+
+  // Debug action checklist rendering conditions (after tabs is defined)
+  console.log('Available tabs:', tabs.map(t => t.id));
+  const checklistRenderCheck = {
+    activeTab,
+    isChecklistTab: activeTab === 'checklist',
+    hasActionChecklist: !!action_checklist,
+    actionChecklistLength: action_checklist ? action_checklist.length : 0,
+    shouldRender: activeTab === 'checklist' && action_checklist && action_checklist.length > 0
+  };
+  console.log('Action Checklist Render Check:', checklistRenderCheck);
 
   return (
     <div className="space-y-6">
