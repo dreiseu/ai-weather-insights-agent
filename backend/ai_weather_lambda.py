@@ -13,6 +13,7 @@ PHILIPPINE_TZ = timezone(timedelta(hours=8))
 
 def call_openai_api(messages, model="gpt-3.5-turbo", max_tokens=500):
     """Call OpenAI API using urllib"""
+    print(f"Starting OpenAI API call...")
     try:
         api_key = os.environ.get('OPENAI_API_KEY')
         if not api_key:
@@ -38,11 +39,14 @@ def call_openai_api(messages, model="gpt-3.5-turbo", max_tokens=500):
         request = urllib.request.Request(url, data=data, headers=headers, method='POST')
 
         # Make request
-        with urllib.request.urlopen(request, timeout=30) as response:
+        print(f"Making OpenAI API request...")
+        with urllib.request.urlopen(request, timeout=25) as response:
             if response.getcode() != 200:
+                print(f"OpenAI API returned error code: {response.getcode()}")
                 return None, f"OpenAI API error: {response.getcode()}"
 
             result = json.loads(response.read().decode('utf-8'))
+            print(f"OpenAI API call completed successfully")
             return result, None
 
     except Exception as e:
@@ -154,20 +158,28 @@ def analyze_weather_with_ai(weather_data, audience="general"):
         ]
 
         # Call OpenAI
+        print(f"Calling OpenAI API with {len(messages)} messages")
         ai_response, error = call_openai_api(messages)
 
         if error:
+            print(f"OpenAI API error: {error}")
             return create_fallback_response(current, audience), f"AI analysis unavailable: {error}"
+
+        print(f"OpenAI API call successful: {type(ai_response)}")
 
         # Parse AI response
         ai_content = ai_response.get('choices', [{}])[0].get('message', {}).get('content', '')
+        print(f"OpenAI raw response: {ai_content}")
 
         try:
             # Try to parse as JSON
             ai_analysis = json.loads(ai_content)
-        except:
-            # Fallback if JSON parsing fails
-            return create_fallback_response(current, audience), "AI response parsing failed"
+            print(f"Successfully parsed AI response: {ai_analysis}")
+        except json.JSONDecodeError as e:
+            # Log the parsing error details
+            print(f"JSON parsing failed. Error: {str(e)}")
+            print(f"Raw content that failed: {repr(ai_content)}")
+            return create_fallback_response(current, audience), f"AI response parsing failed: {str(e)}"
 
         # Combine with weather data
         result = {
@@ -229,6 +241,9 @@ def create_fallback_response(weather_data, audience):
 def lambda_handler(event, context):
     """Lambda handler with full AI weather functionality"""
 
+    # Add debug logging
+    print(f"Lambda event: {json.dumps(event)}")
+
     method = event.get('httpMethod', 'GET')
     path = event.get('path', '/')
 
@@ -267,7 +282,21 @@ def lambda_handler(event, context):
         # Weather insights endpoint - FULL AI VERSION
         elif path == '/weather/insights' and method == 'POST':
             try:
-                body = json.loads(event.get('body', '{}')) if event.get('body') else {}
+                # Safely parse request body
+                body = {}
+                if event.get('body'):
+                    try:
+                        body = json.loads(event.get('body'))
+                    except json.JSONDecodeError:
+                        return {
+                            'statusCode': 400,
+                            'headers': cors_headers,
+                            'body': json.dumps({
+                                'success': False,
+                                'error': 'Invalid JSON in request body'
+                            })
+                        }
+
                 location = body.get('location', 'Manila, PH')
                 audience = body.get('audience', 'general')
 
@@ -289,13 +318,19 @@ def lambda_handler(event, context):
                 if ai_error:
                     analysis['ai_error'] = ai_error
 
-                return {
+                response = {
                     'statusCode': 200,
                     'headers': cors_headers,
                     'body': json.dumps(analysis)
                 }
+                print(f"Returning successful response: {response}")
+                return response
 
             except Exception as e:
+                # Log the full error for debugging
+                print(f"Weather insights error: {str(e)}")
+                import traceback
+                print(f"Traceback: {traceback.format_exc()}")
                 return {
                     'statusCode': 500,
                     'headers': cors_headers,
@@ -354,6 +389,9 @@ def lambda_handler(event, context):
 
     except Exception as e:
         # Global error handler
+        print(f"Global Lambda error: {str(e)}")
+        import traceback
+        print(f"Global Traceback: {traceback.format_exc()}")
         return {
             'statusCode': 500,
             'headers': cors_headers,

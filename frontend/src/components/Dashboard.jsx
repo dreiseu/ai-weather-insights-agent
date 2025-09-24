@@ -262,6 +262,7 @@ export default function Dashboard() {
         )}
 
         {/* Results */}
+        {console.log('Dashboard data:', data) || null}
         {data && data.success && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 fade-in">
             {/* Weather Card */}
