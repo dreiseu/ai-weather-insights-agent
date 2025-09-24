@@ -96,8 +96,8 @@ export default function WeatherCard({ weatherData }) {
       <div className="card">
         <h4 className="text-lg font-semibold text-gray-900 mb-6">Current Conditions</h4>
 
-        {/* Weather Details - Inline format with icon + value + label on same line */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {/* Weather Details - Single column with 6 rows */}
+        <div className="space-y-4">
           {/* Humidity */}
           <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
             <Droplets className="w-5 h-5 text-blue-500 flex-shrink-0" />
