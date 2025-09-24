@@ -83,13 +83,19 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
 
   // Helper function to find related recommendation for a checklist item
   const findRelatedRecommendation = (checklistItem) => {
+    if (!checklistItem || !sortedRecommendations || sortedRecommendations.length === 0) {
+      return null;
+    }
+
     const [timing, action] = checklistItem.split(': ');
     const actionText = action || checklistItem;
-    
+
     // Try to match by keywords in the action text
     const keywords = actionText.toLowerCase().split(' ').filter(word => word.length > 3);
-    
+
     return sortedRecommendations.find(rec => {
+      if (!rec || !rec.title || !rec.action) return false;
+
       const recText = `${rec.title} ${rec.action}`.toLowerCase();
       return keywords.some(keyword => recText.includes(keyword)) ||
              rec.action.toLowerCase().includes(actionText.toLowerCase().substring(0, 20));
@@ -269,15 +275,15 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
                         <div className="border-t border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
                           <div className="mb-4">
                             <div className="flex flex-wrap items-center gap-3 mb-3">
-                              <span className={`badge ${weatherUtils.getPriorityColor(relatedRecommendation.priority)} text-sm px-3 py-1`}>
-                                {relatedRecommendation.priority.toUpperCase()}
+                              <span className={`badge ${weatherUtils.getPriorityColor(relatedRecommendation.priority || 'medium')} text-sm px-3 py-1`}>
+                                {relatedRecommendation.priority?.toUpperCase() || 'MEDIUM'}
                               </span>
                               <span className="text-sm text-gray-600 bg-white px-3 py-1 rounded-full border">
-                                {relatedRecommendation.target_audience.replace('_', ' ')}
+                                {relatedRecommendation.target_audience?.replace('_', ' ') || 'general'}
                               </span>
                             </div>
                             <h4 className="font-bold text-gray-900 mb-3 text-lg">
-                              {relatedRecommendation.title}
+                              {relatedRecommendation.title || 'Action Item'}
                             </h4>
                           </div>
 
@@ -288,19 +294,19 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
                               Detailed Action:
                             </h5>
                             <p className="text-gray-800 leading-relaxed break-words whitespace-pre-wrap">
-                              {relatedRecommendation.action}
+                              {relatedRecommendation.action || 'No detailed action available'}
                             </p>
                           </div>
 
                           {/* Reasoning */}
-                          {relatedRecommendation.reasoning && (
+                          {relatedRecommendation.reason && (
                             <div className="mb-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                               <h5 className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide flex items-center">
                                 <Lightbulb className="w-4 h-4 mr-2 text-yellow-600" />
                                 Why This Matters:
                               </h5>
                               <p className="text-gray-700 leading-relaxed break-words whitespace-pre-wrap">
-                                {relatedRecommendation.reasoning}
+                                {relatedRecommendation.reason}
                               </p>
                             </div>
                           )}
