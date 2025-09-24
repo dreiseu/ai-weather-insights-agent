@@ -264,7 +264,7 @@ def lambda_handler(event, context):
             }
 
         # Weather insights endpoint - FULL AI VERSION
-        elif path == '/api/weather/insights' and method == 'POST':
+        elif path == '/weather/insights' and method == 'POST':
             try:
                 body = json.loads(event.get('body', '{}')) if event.get('body') else {}
                 location = body.get('location', 'Manila, PH')
@@ -306,7 +306,7 @@ def lambda_handler(event, context):
                 }
 
         # System status endpoint
-        elif path == '/api/system/status':
+        elif path == '/system/status':
             return {
                 'statusCode': 200,
                 'headers': cors_headers,
