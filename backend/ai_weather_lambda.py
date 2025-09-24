@@ -28,6 +28,12 @@ def call_openai_api(messages, model="gpt-3.5-turbo", max_tokens=500):
             "max_tokens": max_tokens,
             "temperature": 0.7
         }
+        print(f"OpenAI request payload: {json.dumps(payload)}")
+
+        # Validate messages format
+        if not messages or not isinstance(messages, list):
+            print(f"ERROR: Invalid messages format: {messages}")
+            return None, "Invalid messages format"
 
         headers = {
             'Content-Type': 'application/json',
@@ -45,7 +51,24 @@ def call_openai_api(messages, model="gpt-3.5-turbo", max_tokens=500):
                 print(f"OpenAI API returned error code: {response.getcode()}")
                 return None, f"OpenAI API error: {response.getcode()}"
 
-            result = json.loads(response.read().decode('utf-8'))
+            # Read the full response
+            response_bytes = response.read()
+            response_text = response_bytes.decode('utf-8')
+            print(f"Response length: {len(response_text)}")
+
+            # Don't log the full response as it breaks across lines
+            # print(f"Raw OpenAI response text: '{response_text}'")
+
+            if not response_text.strip():
+                print("ERROR: OpenAI returned empty response!")
+                return None, "OpenAI returned empty response"
+
+            try:
+                result = json.loads(response_text)
+            except json.JSONDecodeError as e:
+                print(f"JSON decode error: {str(e)}")
+                print(f"Failed to parse response of length {len(response_text)}")
+                return None, f"JSON parsing failed: {str(e)}"
             print(f"OpenAI API call completed successfully")
             return result, None
 
