@@ -315,8 +315,16 @@ export default function Dashboard() {
             {/* Insights Panel */}
             <div className="lg:col-span-2">
               <InsightsPanel
-                forecastData={data}
-                recommendationsData={Array.isArray(data.recommendations) ? data.recommendations : []}
+                forecastData={{
+                  insights: Array.isArray(data.recommendations) ? data.recommendations : [],
+                  weather_trends: [],
+                  risk_alerts: Array.isArray(data.risk_alerts) ? data.risk_alerts : []
+                }}
+                recommendationsData={{
+                  recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
+                  priority_summary: data.summary || "",
+                  action_checklist: []
+                }}
                 currentWeather={data.current_weather}
               />
             </div>
