@@ -47,18 +47,18 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
   }
 
   // Handle our actual data structure - both objects have the same data
-  const insights = forecastData.recommendations || [];
+  const insights = forecastData.forecast_insights || [];
   const weather_trends = []; // Empty for now - could be populated with trend analysis
   const risk_alerts = forecastData.risk_alerts || [];
   const recommendations = forecastData.recommendations || [];
   const priority_summary = forecastData.summary || "";
-  const action_checklist = (forecastData.recommendations || []).map(rec => {
+  const action_checklist = (forecastData.action_checklist || []).map(item => {
     // Format timing to match what the action checklist expects
-    const timing = rec.timing === 'today' ? '24H' :
-                  rec.timing === 'immediate' ? 'NOW' :
-                  rec.timing === 'within 2 hours' ? '2H' :
-                  rec.timing === 'this week' ? 'WEEK' : '24H';
-    return `${timing}: ${rec.title}`;
+    const timing = item.timing === 'today' ? '24H' :
+                  item.timing === 'immediate' ? 'NOW' :
+                  item.timing === 'within 2 hours' ? '2H' :
+                  item.timing === 'this week' ? 'WEEK' : '24H';
+    return `${timing}: ${item.item}`;
   });
 
   // Debug extracted data
@@ -357,24 +357,24 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
               </div>
               <div className="grid gap-6">
                 {insights.map((insight, index) => {
-                  const priorityColor = weatherUtils.getPriorityColor(insight.priority);
-                  
+                  const impactColor = insight.impact_level === 'high' ? 'bg-red-100 text-red-700' :
+                                     insight.impact_level === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                     'bg-green-100 text-green-700';
+
                   return (
                     <div key={index} className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">
                       <div className="flex items-center justify-between mb-3">
-                        <span className={`badge ${priorityColor} text-sm`}>
-                          {insight.priority.toUpperCase()}
+                        <span className={`badge ${impactColor} text-sm`}>
+                          {insight.impact_level?.toUpperCase() || 'MEDIUM'}
                         </span>
                         <div className="text-sm text-gray-500 flex items-center space-x-3">
-                          <span>Confidence: {Math.round(insight.confidence * 100)}%</span>
+                          <span>Confidence: {Math.round((insight.confidence || 0.7) * 100)}%</span>
                           <span>•</span>
-                          <span>{insight.time_horizon}</span>
-                          <span>•</span>
-                          <span className="capitalize">{insight.category}</span>
+                          <span>{insight.timeframe || 'next 24 hours'}</span>
                         </div>
                       </div>
-                      <h4 className="font-semibold text-gray-900 mb-3 text-lg">{insight.title}</h4>
-                      <p className="text-gray-600 leading-relaxed break-words whitespace-pre-wrap">{insight.description}</p>
+                      <h4 className="font-semibold text-gray-900 mb-3 text-lg">{insight.insight}</h4>
+                      <p className="text-gray-600 leading-relaxed break-words whitespace-pre-wrap">{insight.specific_concern}</p>
                     </div>
                   );
                 })}
