@@ -86,7 +86,7 @@ export default function WeatherCard({ weatherData }) {
             )}
             <div className="flex items-center justify-center md:justify-end text-lg text-gray-500">
               <Clock className="w-5 h-5 mr-2" />
-              {formattedDate}
+              <span className="whitespace-nowrap">{formattedDate}</span>
             </div>
           </div>
         </div>
@@ -96,10 +96,10 @@ export default function WeatherCard({ weatherData }) {
       <div className="card">
         <h4 className="text-lg font-semibold text-gray-900 mb-6">Current Conditions</h4>
 
-        {/* Weather Details Grid - More Spacious */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        {/* Weather Details Grid - Responsive: 2 cols mobile, 3 cols tablet, 6 cols fullscreen */}
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-6">
           {/* Humidity */}
-          <div className="text-center p-6 bg-blue-50 rounded-xl border border-blue-100">
+          <div className="text-center p-6 bg-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
             <Droplets className="w-8 h-8 text-blue-500 mx-auto mb-3" />
             <div className="text-2xl font-bold text-gray-700 mb-1">{humidity}%</div>
             <div className="text-sm text-gray-600 font-medium">Humidity</div>
@@ -107,7 +107,7 @@ export default function WeatherCard({ weatherData }) {
 
           {/* Wind Speed */}
           {wind_speed && (
-            <div className="text-center p-6 bg-green-50 rounded-xl border border-green-100">
+            <div className="text-center p-6 bg-green-50 rounded-xl border border-green-100 hover:shadow-md transition-shadow">
               <Wind className="w-8 h-8 text-green-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-700 mb-1">
                 {Math.round(wind_speed)} m/s
@@ -118,7 +118,7 @@ export default function WeatherCard({ weatherData }) {
 
           {/* Wind Direction */}
           {wind_direction && (
-            <div className="text-center p-6 bg-cyan-50 rounded-xl border border-cyan-100">
+            <div className="text-center p-6 bg-cyan-50 rounded-xl border border-cyan-100 hover:shadow-md transition-shadow">
               <Compass className="w-8 h-8 text-cyan-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-700 mb-1">
                 {wind_direction}°
@@ -129,7 +129,7 @@ export default function WeatherCard({ weatherData }) {
 
           {/* Pressure */}
           {pressure && (
-            <div className="text-center p-6 bg-purple-50 rounded-xl border border-purple-100">
+            <div className="text-center p-6 bg-purple-50 rounded-xl border border-purple-100 hover:shadow-md transition-shadow">
               <Gauge className="w-8 h-8 text-purple-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-700 mb-1">
                 {Math.round(pressure)} hPa
@@ -140,7 +140,7 @@ export default function WeatherCard({ weatherData }) {
 
           {/* Visibility */}
           {visibility && (
-            <div className="text-center p-6 bg-amber-50 rounded-xl border border-amber-100">
+            <div className="text-center p-6 bg-amber-50 rounded-xl border border-amber-100 hover:shadow-md transition-shadow">
               <Eye className="w-8 h-8 text-amber-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-700 mb-1">
                 {Math.round(visibility / 1000)} km
@@ -151,7 +151,7 @@ export default function WeatherCard({ weatherData }) {
 
           {/* Rainfall */}
           {(rainfall_1h || rainfall_3h) && (
-            <div className="text-center p-6 bg-indigo-50 rounded-xl border border-indigo-100">
+            <div className="text-center p-6 bg-indigo-50 rounded-xl border border-indigo-100 hover:shadow-md transition-shadow">
               <CloudRain className="w-8 h-8 text-indigo-500 mx-auto mb-3" />
               <div className="text-2xl font-bold text-gray-700 mb-1">
                 {rainfall_1h ? `${rainfall_1h} mm` : rainfall_3h ? `${rainfall_3h} mm` : '0 mm'}
