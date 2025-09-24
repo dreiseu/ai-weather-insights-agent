@@ -269,7 +269,10 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold text-green-600">✅ DATA RECEIVED - RENDERING WEATHER INSIGHTS</h2>
             {/* Weather Card */}
             <div className="lg:col-span-1">
-              <WeatherCard weatherData={data.current_weather} />
+              <WeatherCard weatherData={{
+                ...data.current_weather,
+                location: data.location
+              }} />
               
               {/* Data Quality Card */}
               {data.data_quality && (
@@ -311,9 +314,12 @@ export default function Dashboard() {
 
             {/* Insights Panel */}
             <div className="lg:col-span-2">
-              <InsightsPanel 
-                forecastData={data.forecast_insights}
+              <InsightsPanel
+                forecastData={data}
                 recommendationsData={data.recommendations}
+                riskAlerts={data.risk_alerts}
+                summary={data.summary}
+                audience={data.audience}
                 currentWeather={data.current_weather}
               />
             </div>
