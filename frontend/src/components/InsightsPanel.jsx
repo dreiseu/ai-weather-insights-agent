@@ -18,7 +18,16 @@ import {
 export default function InsightsPanel({ forecastData, recommendationsData, currentWeather }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [expandedItems, setExpandedItems] = useState({});
-  
+
+  // Debug logging
+  console.log('InsightsPanel props:', {
+    forecastData: !!forecastData,
+    recommendationsData: !!recommendationsData,
+    currentWeather: !!currentWeather,
+    forecastKeys: forecastData ? Object.keys(forecastData) : 'none',
+    recommendationsKeys: recommendationsData ? Object.keys(recommendationsData) : 'none'
+  });
+
   if (!forecastData || !recommendationsData) {
     return (
       <div className="space-y-6">
@@ -50,6 +59,15 @@ export default function InsightsPanel({ forecastData, recommendationsData, curre
                   rec.timing === 'within 2 hours' ? '2H' :
                   rec.timing === 'this week' ? 'WEEK' : '24H';
     return `${timing}: ${rec.title}`;
+  });
+
+  // Debug extracted data
+  console.log('Extracted data:', {
+    insights: insights.length,
+    risk_alerts: risk_alerts.length,
+    recommendations: recommendations.length,
+    priority_summary: priority_summary.substring(0, 50) + '...',
+    action_checklist: action_checklist.length
   });
 
   // Sort recommendations by priority and timing
